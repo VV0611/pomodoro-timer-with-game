@@ -133,7 +133,14 @@ pomodoro-timer/
 ├── timer.js        # All the timer logic      ·  全部计时逻辑
 ├── sw.js           # Service worker (offline) ·  Service Worker(离线缓存)
 ├── manifest.json   # PWA manifest             ·  PWA 配置清单
-└── icon.svg        # App icon                 ·  应用图标
+├── icon.svg        # App icon                 ·  应用图标
+└── cats/           # State-driven cat images (PNG, transparent bg)  ·  状态驱动猫咪图片（透明背景 PNG）
+    ├── idle-cat.png
+    ├── focus-cat.png
+    ├── paused-cat.png
+    ├── shortbreak-cat.png
+    ├── longbreak-cat.png
+    └── done-cat.png
 ```
 
 ## 🔄 Changelog / 更新记录
@@ -153,6 +160,30 @@ pomodoro-timer/
 - 📊 **每周统计图** —— 图表在 Retina / 高分屏上现在清晰显示
 - ⚙️ **Service worker** — fixed a race condition where `skipWaiting()` could activate before caching finished
 - ⚙️ **Service Worker** —— 修复了缓存完成前提前激活的竞争条件
+
+### v4.0 — 2026-06-13
+
+**Black-cat theme / 黑猫主题**
+- Complete visual overhaul: pure-black background (`#000`), deep dark cards (`#141414`), rose-pink accent (`#e0a0a8`) replacing the original coral red — all driven by CSS custom properties
+- 全面视觉重设计：纯黑背景（`#000`）、深色卡片（`#141414`）、玫瑰粉强调色（`#e0a0a8`）替换原有珊瑚红 —— 全部由 CSS 自定义属性驱动
+
+**State-driven cat images / 状态驱动猫咪图片**
+- 6 cat images (idle / focus / paused / short-break / long-break / done) switch automatically with the timer state — controlled entirely by CSS body-class rules, no extra JS logic
+- Backgrounds removed with AI (rembg / U2Net); images are transparent PNGs that blend seamlessly with the dark theme
+- Pink spotlight glow (`drop-shadow`) renders behind each cat image
+- 6 张猫咪图片（空闲 / 专注 / 暂停 / 短休息 / 长休息 / 完成）随计时器状态自动切换 —— 完全由 CSS body class 规则控制，无需额外 JS 逻辑
+- 使用 AI（rembg / U2Net）抠图，输出为透明背景 PNG，与深色主题无缝融合
+- 每张猫咪图片后方有粉色聚光灯光晕效果（`drop-shadow`）
+
+**Polish / 细节打磨**
+- Quicksand font (Google Fonts) replaces the system font for a softer, rounder look
+- Cards float with a deeper drop shadow (`rgba(0,0,0,0.6)`)
+- Pause button recoloured from orange to accent pink — consistent with the overall palette
+- Quicksand 字体（Google Fonts）替换系统字体，整体风格更柔和圆润
+- 卡片投影加深（`rgba(0,0,0,0.6)`），悬浮感更强
+- 暂停按钮从橙色改为强调粉色，与整体配色保持一致
+
+---
 
 ### v3.0 — 2026-06-13
 
