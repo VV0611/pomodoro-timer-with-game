@@ -37,7 +37,7 @@ A clean, installable Pomodoro focus timer built with **vanilla HTML, CSS, and Ja
 - 📊 7-day stats bar chart — see how many pomodoros you've completed each day
 
 **Atmosphere & alerts**
-- 🎵 Ambient sounds (ocean, rain, forest, lo-fi, jazz)
+- 🎵 Ambient sounds (ocean, rain, forest, lo-fi, jazz × 2) — local MP3 files, no ads, no internet required _** Changes from version 1
 - 🔔 Gentle beep when a session ends — generated live with the Web Audio API, no audio files needed
 - 🖥️ Desktop notifications when a session finishes
 - ⛶ Fullscreen focus mode
@@ -61,7 +61,7 @@ A clean, installable Pomodoro focus timer built with **vanilla HTML, CSS, and Ja
 - 📊 近 7 天统计柱状图 —— 直观看到每天完成了多少个番茄钟
 
 **氛围与提醒**
-- 🎵 环境音(海浪、雨声、森林、Lo-fi、爵士)
+- 🎵 环境音(海浪、雨声、森林、Lo-fi、爵士 × 2) —— 本地 MP3 文件，无广告，无需联网 （**从第一版本更改）
 - 🔔 一段结束时播放轻柔提示音 —— 用 Web Audio API 实时生成,无需任何音频文件
 - 🖥️ 一段结束时弹出桌面通知
 - ⛶ 全屏专注模式
@@ -135,6 +135,31 @@ pomodoro-timer/
 ├── manifest.json   # PWA manifest             ·  PWA 配置清单
 └── icon.svg        # App icon                 ·  应用图标
 ```
+
+## 🔄 Changelog / 更新记录
+
+### v2.0 — 2026-06-13
+
+**Ambient sounds overhaul / 环境音重构**
+- Replaced YouTube stream links with local MP3 files — music plays instantly with **zero ads**
+- 将 YouTube 在线链接替换为本地 MP3 文件 —— 音乐即时播放，**无广告打断**
+
+**Bug fixes / 问题修复**
+- 📱 **Mobile layout** — card widths now use `min()` so the UI never overflows on narrow phones; timer font scales down on small screens
+- 📱 **手机端布局** —— 卡片宽度改用 `min()` 函数，窄屏不再溢出；计时器字体在小屏自动缩小
+- 💬 **Status message** — session-complete messages ("Focus session done! 🎉") no longer get overwritten when a break auto-starts
+- 💬 **状态提示** —— 专注结束提示不再被休息自动开始的消息覆盖
+- 📊 **Weekly chart** — chart is now crisp on Retina / HiDPI displays
+- 📊 **每周统计图** —— 图表在 Retina / 高分屏上现在清晰显示
+- ⚙️ **Service worker** — fixed a race condition where `skipWaiting()` could activate before caching finished
+- ⚙️ **Service Worker** —— 修复了缓存完成前提前激活的竞争条件
+
+---
+
+### v1.0 — 2026-06-12
+
+- Initial release / 初始版本发布
+
 
 ---
 
