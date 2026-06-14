@@ -213,6 +213,15 @@
       Think of a div as an empty cardboard box — it holds things inside it.
     -->
 
+    <!-- ---- NOTIFICATION PERMISSION PROMPT (shown on first visit) ---- -->
+    <div class="notif-prompt" id="notifPrompt">
+      <span class="notif-prompt-text">🔔 Allow notifications so we can alert you when your timer ends?</span>
+      <div class="notif-prompt-btns">
+        <button class="notif-prompt-skip"  onclick="skipNotifPrompt()">Later</button>
+        <button class="notif-prompt-allow" onclick="allowNotifPrompt()">Allow 🔔</button>
+      </div>
+    </div>
+
     <!-- ---- CAT IMAGE (switches by timer state via CSS body classes) ---- -->
     <div class="cat-wrapper">
       <img class="cat-image cat-idle"        src="cats/idle-cat.png"        alt="" aria-hidden="true">

@@ -1633,3 +1633,76 @@ body.long-break-mode .cat-long-break { display: block; }
    Overrides long-break because it's added after long-break-mode. */
 body.done .cat-long-break  { display: none; }
 body.done .cat-done        { display: block; }
+
+
+/* ============================================================
+   NOTIFICATION PERMISSION PROMPT BANNER
+   ============================================================ */
+
+.notif-prompt {
+  display: none;
+  background: rgba(224,160,168,0.08);
+  border: 1px solid rgba(224,160,168,0.22);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.notif-prompt.visible {
+  display: block;
+  animation: notifSlideDown 0.3s ease;
+}
+
+@keyframes notifSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.notif-prompt-text {
+  font-size: 13px;
+  color: var(--text);
+  display: block;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.notif-prompt-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.notif-prompt-allow {
+  padding: 6px 14px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.notif-prompt-allow:hover {
+  background: var(--accent-dk);
+}
+
+.notif-prompt-skip {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.45);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.notif-prompt-skip:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.7);
+}

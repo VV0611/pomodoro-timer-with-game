@@ -105,61 +105,41 @@ let ambientType = "off"; // "off"|"ocean"|"rain"|"forest"|"lofi"|"jazz1"|"jazz2"
 function playBeep(type) {
   /*
     AudioContext is the browser's sound engine.
-    "new AudioContext()" starts it up — like turning on a speaker.
-
-    WHY window.AudioContext || window.webkitAudioContext ?
-    Older Safari browsers use "webkitAudioContext" instead of "AudioContext".
-    The || means "try the first one, if it doesn't exist, try the second."
-    This makes the code work on more browsers.
+    Older Safari uses "webkitAudioContext" — the || handles both.
   */
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
-
-  if (!AudioCtx) return; // very old browser with no audio support — skip silently
+  if (!AudioCtx) return;
 
   const ctx = new AudioCtx();
 
   /*
-    An "oscillator" is the thing that actually generates sound.
-    Think of it like a guitar string — it vibrates at a certain frequency.
-    Frequency is measured in Hz (Hertz). Higher Hz = higher pitch.
-      261 Hz ≈ middle C on a piano
-      523 Hz ≈ one octave higher
+    Play a sequence of notes instead of a single beep:
+      focus complete → 3 ascending notes (C5, E5, G5) — cheerful "well done!"
+      break complete → 2 descending notes (E5, C5)    — gentle "back to work"
+
+    Each note: oscillator → gainNode → speakers.
+    We stagger the start times so they play one after another.
   */
-  const oscillator = ctx.createOscillator();
+  const notes = type === "focus"
+    ? [{ freq: 523, t: 0 }, { freq: 659, t: 0.18 }, { freq: 784, t: 0.36 }]
+    : [{ freq: 659, t: 0 }, { freq: 523, t: 0.18 }];
 
-  /*
-    A "gainNode" controls the VOLUME.
-    gain.value goes from 0 (silent) to 1 (full volume).
-    We use 0.4 so it's noticeable but not startling.
-  */
-  const gainNode = ctx.createGain();
+  notes.forEach(({ freq, t }) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
 
-  // Wire them together: oscillator → gainNode → speakers
-  oscillator.connect(gainNode);
-  gainNode.connect(ctx.destination); // ctx.destination = the speakers
+    osc.type = "sine";
+    osc.frequency.value = freq;
 
-  // Choose the sound based on what just finished
-  if (type === "focus") {
-    oscillator.frequency.value = 523; // Higher pitch = "well done!" feeling
-    oscillator.type = "sine";         // "sine" wave = smooth, gentle tone
-  } else {
-    oscillator.frequency.value = 392; // Lower pitch = "break is over, back to work"
-    oscillator.type = "sine";
-  }
-
-  /*
-    ctx.currentTime = "right now" in the audio timeline (in seconds).
-    .start(now)         → begin playing immediately
-    .stop(now + 0.35)   → stop after 0.35 seconds
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35)
-      → smoothly fade the volume to nearly 0 by 0.35 seconds
-        (avoids a harsh click/pop at the end)
-  */
-  const now = ctx.currentTime;
-  gainNode.gain.setValueAtTime(0.4, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-  oscillator.start(now);
-  oscillator.stop(now + 0.35);
+    const start = ctx.currentTime + t;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(0.35, start + 0.05); // quick attack
+    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.38); // smooth fade
+    osc.start(start);
+    osc.stop(start + 0.4);
+  });
 }
 
 
@@ -1130,6 +1110,36 @@ function showNotification(title, body) {
     │ Time for a well-earned break   │  ← body
     └────────────────────────────────┘
   */
+}
+
+
+/* =============================================================
+   SECTION C4b: NOTIFICATION PERMISSION PROMPT BANNER
+   Shows an in-app banner on first visit asking the user to allow
+   notifications. Browsers require a user click before we can call
+   Notification.requestPermission(), so we can't trigger it on
+   page load directly — we show our own UI first, then the user's
+   click on "Allow" satisfies the browser's gesture requirement.
+   ============================================================= */
+
+function showNotifPrompt() {
+  if (!("Notification" in window)) return;           // browser doesn't support it
+  if (Notification.permission !== "default") return; // already decided (granted or denied)
+  if (sessionStorage.getItem("notifPromptDismissed")) return; // dismissed this session
+
+  document.getElementById("notifPrompt").classList.add("visible");
+}
+
+async function allowNotifPrompt() {
+  document.getElementById("notifPrompt").classList.remove("visible");
+  await requestNotificationPermission();
+}
+
+function skipNotifPrompt() {
+  document.getElementById("notifPrompt").classList.remove("visible");
+  sessionStorage.setItem("notifPromptDismissed", "1");
+  // "1" stored in sessionStorage — clears automatically when the tab is closed,
+  // so the prompt will show again on a fresh visit but not on the same session.
 }
 
 
@@ -2167,8 +2177,9 @@ document.addEventListener("fullscreenchange", () => {
 loadSettings();          // 1. Read saved focus/break/long-break times from localStorage
 initialise();            // 2. Draw the timer display (needs step 1 first)
 initNotifications();     // 3. Re-enable 🔔 bell if browser permission was already granted
-loadStats();             // 4. Draw today's 🍅 × N count
-loadStreak();            // 5. Draw 🔥 streak counter
-loadWeeklyStats();       // 6. Draw the 7-day bar chart
+showNotifPrompt();       // 4. Show in-app permission banner if user hasn't decided yet
+loadStats();             // 5. Draw today's 🍅 × N count
+loadStreak();            // 6. Draw 🔥 streak counter
+loadWeeklyStats();       // 7. Draw the 7-day bar chart
 loadAmbientPreference(); // 7. Resume ambient sound if user had one selected
 loadTasks();             // 8. Draw saved task list (must be last — renderTasks calls updateActiveTaskDisplay)
