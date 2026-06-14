@@ -38,8 +38,8 @@ A clean, installable Pomodoro focus timer built with **vanilla HTML, CSS, and Ja
 
 **Atmosphere & alerts**
 - 🎵 Ambient sounds (ocean, rain, forest, lo-fi, jazz × 2) — local MP3 files, no ads, no internet required _** Changes from version 1
-- 🔔 Gentle beep when a session ends — generated live with the Web Audio API, no audio files needed
-- 🖥️ Desktop notifications when a session finishes
+- 🔔 3-note chime when a session ends — ascending arpeggio for focus complete, descending for break complete; generated live with the Web Audio API, no audio files needed
+- 🖥️ Desktop notifications when a session finishes — an in-page banner asks for permission on your very first visit
 - ⛶ Fullscreen focus mode
 
 **Works like an app**
@@ -62,8 +62,8 @@ A clean, installable Pomodoro focus timer built with **vanilla HTML, CSS, and Ja
 
 **氛围与提醒**
 - 🎵 环境音(海浪、雨声、森林、Lo-fi、爵士 × 2) —— 本地 MP3 文件，无广告，无需联网 （**从第一版本更改）
-- 🔔 一段结束时播放轻柔提示音 —— 用 Web Audio API 实时生成,无需任何音频文件
-- 🖥️ 一段结束时弹出桌面通知
+- 🔔 一段结束时播放三音琶音提示 —— 专注结束为上行三音，休息结束为下行两音；用 Web Audio API 实时生成，无需任何音频文件
+- 🖥️ 一段结束时弹出桌面通知 —— 首次进入页面时自动显示权限横幅，一键开启
 - ⛶ 全屏专注模式
 
 **像 App 一样使用**
@@ -160,6 +160,16 @@ pomodoro-timer/
 - 📊 **每周统计图** —— 图表在 Retina / 高分屏上现在清晰显示
 - ⚙️ **Service worker** — fixed a race condition where `skipWaiting()` could activate before caching finished
 - ⚙️ **Service Worker** —— 修复了缓存完成前提前激活的竞争条件
+
+### v4.1 — 2026-06-15
+
+**Notification prompt & chime / 通知权限提示 & 琶音音效**
+- First-visit banner asks to enable desktop notifications before the timer starts — no need to hunt for the bell button
+- 首次进入页面时卡片顶部自动出现权限横幅，点击 Allow 即可开启桌面通知，无需手动找铃铛按钮
+- Session-end beep upgraded to a 3-note chime: ascending arpeggio (C5 → E5 → G5) for focus complete, descending (E5 → C5) for break complete — all synthesized via Web Audio API
+- 结束提示音升级为三音琶音：专注结束播放上行三音（C5 → E5 → G5），休息结束播放下行两音（E5 → C5）—— 全部通过 Web Audio API 实时合成
+
+---
 
 ### v4.0 — 2026-06-13
 
