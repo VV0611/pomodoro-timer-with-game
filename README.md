@@ -145,6 +145,14 @@ pomodoro-timer/
 
 ## 🔄 Changelog / 更新记录
 
+### v4.4 — 2026-06-15
+
+**Auto-start next session / 自动开始下一轮**
+- After a break ends, the next focus session starts automatically — no need to press Start
+- 休息结束后自动开始下一轮专注，无需手动按开始
+
+---
+
 ### v4.3 — 2026-06-15
 
 **Notification UX & English UI / 通知体验改善 & 界面英文化**
