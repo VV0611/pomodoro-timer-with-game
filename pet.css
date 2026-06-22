@@ -197,6 +197,7 @@ body {
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
+  padding-top: 52px; /* room for the speech bubble above the cat */
 }
 
 .pet-cat-img {
@@ -1103,3 +1104,55 @@ body {
 .popup-energy { color: #ffe066; }
 .popup-exp    { color: rgba(255, 255, 255, 0.5); }
 .popup-neg    { color: #ff8888; }
+
+
+/* ============================================================
+   20. SPEECH BUBBLE
+   Appears above the cat; text set by JS based on current state.
+   根据猫咪状态由 JS 设置文字，显示在猫咪上方。
+   ============================================================ */
+
+.speech-bubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.speech-bubble.visible {
+  opacity: 1;
+}
+
+/* Arrow tail — fill triangle pointing down to the cat */
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(20, 20, 20, 0.95);
+}

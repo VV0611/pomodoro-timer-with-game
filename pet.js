@@ -270,6 +270,12 @@ function render() {
   // ── Cat image ────────────────────────────────────────────────
   document.getElementById("petCatImg").src = getCatImage(s);
 
+  // ── Speech bubble ────────────────────────────────────────────
+  const bubbleEl   = document.getElementById("speechBubble");
+  const bubbleText = getSpeechBubbleText(s);
+  bubbleEl.textContent = bubbleText;
+  bubbleEl.classList.toggle("visible", bubbleText.length > 0);
+
   // ── Name + Level ─────────────────────────────────────────────
   document.getElementById("catName").textContent = s.name || "Luna";
   document.getElementById("catLv").textContent = "Lv. " + s.level;
@@ -392,6 +398,23 @@ function trySpendCoins(amount) {
   }
   localStorage.setItem("coins", String(coins - amount));
   return true;
+}
+
+
+/* =============================================================
+   SECTION 6a: SPEECH BUBBLE
+   Returns the cat's current "thought" based on state priority.
+   ============================================================= */
+
+function getSpeechBubbleText(s) {
+  if (flashAction === "fed")    return "Yummy! 😋";
+  if (flashAction === "played") return "That was fun! 🎾";
+  if (s.asleep)                 return "";
+  if (s.hunger < 25)            return "I'm starving... 🍖";
+  if (s.energy < 20)            return "I need sleep... 😴";
+  if (s.mood < 25)              return "I'm so bored... 😔";
+  if (s.mood > 85 && s.hunger > 70 && s.energy > 50) return "This is the life~ 😻";
+  return "";
 }
 
 
