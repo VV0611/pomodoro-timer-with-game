@@ -143,6 +143,7 @@ function freshState() {
   return {
     level: 1, exp: 0, hunger: 80, mood: 80, energy: 80,
     asleep: false, lastSeen: Date.now(),
+    name: "Luna",
     owned: [], equipped: freshEquipped(),
   };
 }
@@ -269,7 +270,8 @@ function render() {
   // ── Cat image ────────────────────────────────────────────────
   document.getElementById("petCatImg").src = getCatImage(s);
 
-  // ── Level ────────────────────────────────────────────────────
+  // ── Name + Level ─────────────────────────────────────────────
+  document.getElementById("catName").textContent = s.name || "Luna";
   document.getElementById("catLv").textContent = "Lv. " + s.level;
 
   // ── EXP bar ──────────────────────────────────────────────────
@@ -285,6 +287,9 @@ function render() {
 
   // ── Sleep button label ───────────────────────────────────────
   document.getElementById("btnSleep").textContent = s.asleep ? "☀️ Wake" : "💤 Sleep";
+  document.getElementById("btnPlay").textContent  = "🎾 Play · 🪙" + PLAY_ACTION.cost;
+  document.getElementById("btnFeed").textContent  = "🍖 Feed · 🪙10";
+
 
   // ── Disabled states ──────────────────────────────────────────
   document.getElementById("btnFeed").disabled = s.asleep;
@@ -319,9 +324,13 @@ function render() {
 
 function setStat(name, rawValue) {
   const val = Math.round(rawValue);
-  document.getElementById("fill" + name).style.width = val + "%";
-  document.getElementById("val"  + name).textContent = val;
+  const el  = document.getElementById("fill" + name);
+  el.style.width = val + "%";
+  el.classList.toggle("stat-low",      val < 25);
+  el.classList.toggle("stat-critical", val < 10);
+  document.getElementById("val" + name).textContent = val;
 }
+
 
 
 /* =============================================================
@@ -420,6 +429,18 @@ function doFeedItem(itemId) {
 
   render();
   renderFeedTab();
+}
+
+// Rename the cat — prompts user for a new name and persists it.
+// 重命名猫咪，弹出输入框并持久化保存。
+function startRename() {
+  const input   = prompt("Enter your cat's name:", petState.name || "Luna");
+  if (input === null) return;
+  const trimmed = input.trim();
+  if (!trimmed) return;
+  petState.name = trimmed.slice(0, 20);
+  saveState(petState);
+  render();
 }
 
 // Quick-feed shortcut on the main action button → uses Dried Fish.

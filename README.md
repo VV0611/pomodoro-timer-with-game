@@ -145,6 +145,20 @@ pomodoro-timer/
 
 ## 🔄 Changelog / 更新记录
 
+### v5.1 — 2026-06-22
+
+**Cat Companion polish / 猫咪伴侣细节改善**
+- Coin earn rate raised to **3 coins / minute** of focus time (was 1)
+- Feed and Play buttons now show their coin cost in the label (`🍖 Feed · 🪙10`, `🎾 Play · 🪙N`)
+- Stat bars turn amber when a stat drops below 25 and red + pulse when below 10
+- ✏️ Rename button next to the cat's name — click to set a custom name (up to 20 chars), saved to `petState`
+- 金币获取速率提升为**每专注分钟 3 枚**（原为 1 枚）
+- 喂食和玩耍按钮标签现在显示金币花费（`🍖 Feed · 🪙10`、`🎾 Play · 🪙N`）
+- 属性条低于 25 变琥珀色，低于 10 变红色并闪烁
+- 猫咪名字旁新增 ✏️ 改名按钮，自定义名称最多 20 个字，保存至 `petState`
+
+---
+
 ### v5.0 — 2026-06-22
 
 **Cat Companion mini-game / 猫咪伴侣小游戏**

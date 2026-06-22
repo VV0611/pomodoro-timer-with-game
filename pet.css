@@ -1042,3 +1042,24 @@ body {
     width: 52px;
   }
 }
+
+/* ── Rename button (pencil icon next to cat name) ───────────── */
+.btn-rename {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.4;
+  padding: 0 4px;
+  transition: opacity 0.2s;
+  vertical-align: middle;
+}
+.btn-rename:hover { opacity: 1; }
+
+.stat-low      { filter: hue-rotate(30deg) saturate(1.5); }
+.stat-critical { filter: hue-rotate(60deg) saturate(2) brightness(1.2); animation: pulse-low 1s infinite; }
+
+@keyframes pulse-low {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
