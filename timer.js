@@ -91,6 +91,7 @@ let activeTaskId = null;    // id of the task the user pinned for this session
 
 // Streak (Feature E)
 let streakCount = 0;        // How many consecutive days the user has studied
+let streakMilestone = null; // Set by checkStreak() when a milestone is hit (3/7/14/30 days); read in sessionComplete()
 
 // Weekly stats (Feature F)
 let weeklyData = {};        // { "Thu Jun 12 2026": 3, "Fri Jun 13 2026": 5, ... }
@@ -482,7 +483,18 @@ function sessionComplete() {
       modeLabel.textContent = "Long Break";
       totalSeconds   = longBreakMinutes * 60; // e.g. 15 * 60 = 900 seconds
       sessionSeconds = totalSeconds;
-      statusMessage.textContent = `Cycle complete! 🏆 Enjoy your ${longBreakMinutes}-min long break!`;
+      // Pick a status message — goal/streak milestones take priority over the default
+      const goalHit = pomodoroCount === dailyGoal;
+      if (goalHit && streakMilestone) {
+        statusMessage.textContent = `Goal reached + ${streakMilestone} 🎉 Long break earned!`;
+      } else if (goalHit) {
+        statusMessage.textContent = `Daily goal reached! 🎯 Long break — you earned it!`;
+      } else if (streakMilestone) {
+        statusMessage.textContent = `${streakMilestone} — long break starting! 🏆`;
+      } else {
+        statusMessage.textContent = `Cycle complete! 🏆 Enjoy your ${longBreakMinutes}-min long break!`;
+      }
+      streakMilestone = null; // Clear after use so it doesn't bleed into the next session
       showNotification("Cycle complete! 🏆", `You earned a ${longBreakMinutes}-min long break — great work!`);
 
     } else {
@@ -492,7 +504,18 @@ function sessionComplete() {
       modeLabel.textContent = "Break";
       totalSeconds   = breakMinutes * 60; // e.g. 5 * 60 = 300 seconds
       sessionSeconds = totalSeconds;
-      statusMessage.textContent = "Focus session done! Break starting... 🎉";
+      // Pick a status message — goal/streak milestones take priority over the default
+      const goalHit = pomodoroCount === dailyGoal;
+      if (goalHit && streakMilestone) {
+        statusMessage.textContent = `Goal reached + ${streakMilestone} — break starting! 🎉`;
+      } else if (goalHit) {
+        statusMessage.textContent = `Daily goal reached! 🎯 Break starting — you earned it!`;
+      } else if (streakMilestone) {
+        statusMessage.textContent = `${streakMilestone} — focus session done! Break starting...`;
+      } else {
+        statusMessage.textContent = "Focus session done! Break starting... 🎉";
+      }
+      streakMilestone = null; // Clear after use
       showNotification("Focus session complete! 🎉", "Great work — your break is starting now ☕");
     }
 
@@ -942,7 +965,7 @@ function incrementStats() {
   updateStatsDisplay();
   checkStreak();        // Update consecutive-day streak (Feature E)
   updateWeeklyStats();  // Update the 7-day chart data (Feature F)
-  updateGoalDisplay();  // Refresh the 🎯 progress chip
+  updateGoalDisplay(true);  // Refresh the 🎯 progress chip; true = allow celebrate animation
 }
 
 
@@ -1711,6 +1734,11 @@ function checkStreak() {
   data.lastDate = today;
   localStorage.setItem("streakData", JSON.stringify(data));
   streakCount = data.streak;
+
+  // Check if this streak hits a milestone — stored so sessionComplete() can show it
+  const milestones = { 3: "3-day streak! 🔥", 7: "7 days strong! 🔥🔥🔥", 14: "14-day streak! 🏆", 30: "30 days! 🌟 You're unstoppable!" };
+  streakMilestone = milestones[streakCount] || null;
+
   updateStreakDisplay();
 }
 
@@ -2201,10 +2229,21 @@ function loadGoal() {
   updateGoalDisplay();
 }
 
-function updateGoalDisplay() {
+function updateGoalDisplay(celebrate = false) {
+  /*
+    celebrate = true when called from incrementStats() (a session just ended).
+    When the count lands exactly on the goal, we bounce the cat as a visual reward.
+    The false default prevents the animation firing on page load or settings save.
+  */
   const achieved = pomodoroCount >= dailyGoal;
   goalCountEl.textContent = `🎯 ${pomodoroCount} / ${dailyGoal}`;
   goalCountEl.classList.toggle("goal-done", achieved);
+
+  if (celebrate && pomodoroCount === dailyGoal) {
+    const catWrapper = document.querySelector(".cat-wrapper");
+    catWrapper.classList.add("celebrate");
+    setTimeout(() => catWrapper.classList.remove("celebrate"), 700);
+  }
 }
 
 loadSettings();          // 1. Read saved focus/break/long-break times from localStorage
