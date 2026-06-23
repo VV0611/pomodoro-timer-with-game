@@ -652,6 +652,15 @@ body {
   /* Dimmed when asleep or can't afford / 睡眠中或金币不足时半透明 */
 }
 
+.food-qty {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  line-height: 1;
+  align-self: flex-end;
+}
+
 .food-emoji {
   font-size: 26px;
   line-height: 1;
@@ -847,11 +856,7 @@ body {
   z-index: 2;
 }
 
-/* Slot-specific positions on 160 × 160 cat image / 各槽位在 160 × 160 图片上的定位 */
-.acc-head { top: -14px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; }
-.acc-eyes { top: 36px;  right: 4px;                             font-size: 1.2rem; }
-.acc-neck { bottom: 54px; left: 50%; transform: translateX(-50%); font-size: 1.3rem; }
-.acc-held { bottom: 6px; right: -10px;                          font-size: 1.5rem; }
+/* Bed slot position on 160 × 160 cat image / 猫窝槽位定位 */
 .acc-bed  { bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; }
 
 /* ── Card grid ──────────────────────────────────────────────── */
