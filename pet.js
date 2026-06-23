@@ -239,8 +239,9 @@ function applyDecay(state) {
    优先级规则，将当前状态映射到对应图片。
    ============================================================= */
 
-let flashAction = null;  // "fed" | "played" | null — not persisted / 不持久化
-let flashTimer  = null;
+let flashAction   = null;  // "fed" | "played" | null — not persisted / 不持久化
+let flashTimer    = null;
+let checkInNotice = null;  // set for 4 s on first daily visit / 每日首次访问时设置 4 秒
 
 function getCatImage(state) {
   if (flashAction === "fed")                          return "cats/done-cat.png";
@@ -407,6 +408,7 @@ function trySpendCoins(amount) {
    ============================================================= */
 
 function getSpeechBubbleText(s) {
+  if (checkInNotice)            return checkInNotice;
   if (flashAction === "fed")    return "Yummy! 😋";
   if (flashAction === "played") return "That was fun! 🎾";
   if (s.asleep)                 return "";
@@ -436,6 +438,25 @@ function showFloatPopup(items) {
   });
   wrapper.appendChild(el);
   setTimeout(() => el.remove(), 1200);
+}
+
+
+/* =============================================================
+   SECTION 6c: DAILY CHECK-IN BONUS
+   First visit each calendar day awards +20 coins.
+   每个自然日首次访问自动奖励 20 金币。
+   ============================================================= */
+
+function checkDailyBonus() {
+  const today = new Date().toDateString();
+  if (localStorage.getItem("lastCheckIn") === today) return;
+
+  const coins = parseInt(localStorage.getItem("coins") || "0", 10);
+  localStorage.setItem("coins", String(coins + 20));
+  localStorage.setItem("lastCheckIn", today);
+
+  checkInNotice = "Daily bonus! +20🪙";
+  setTimeout(() => { checkInNotice = null; render(); }, 4000);
 }
 
 
@@ -860,10 +881,11 @@ function init() {
   petState = loadState();     // 1. Load saved state (or defaults)    / 加载保存的状态
   applyDecay(petState);       // 2. Apply time-based decay             / 应用时间衰减
   saveState(petState);        // 3. Persist updated lastSeen           / 写回更新后的时间戳
-  render();                   // 4. Draw all UI                        / 渲染界面
-  renderFeedTab();            // 5. Build food item cards              / 构建食物卡片
-  renderShopTab();            // 6. Build shop accessory cards         / 构建商店配饰卡片
-  renderClosetTab();          // 7. Build closet                       / 构建衣柜
+  checkDailyBonus();          // 4. Award first-visit bonus if new day / 新的一天自动发放签到金币
+  render();                   // 5. Draw all UI                        / 渲染界面
+  renderFeedTab();            // 6. Build food item cards              / 构建食物卡片
+  renderShopTab();            // 7. Build shop accessory cards         / 构建商店配饰卡片
+  renderClosetTab();          // 8. Build closet                       / 构建衣柜
 
   document.getElementById("btnFeed").addEventListener("click",   doFeed);
   document.getElementById("btnPlay").addEventListener("click",   doPlay);
