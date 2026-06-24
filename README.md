@@ -4,7 +4,7 @@ A clean, installable Pomodoro focus timer built with **vanilla HTML, CSS, and Ja
 
 一个干净简洁、可安装的番茄钟,用**纯前端技术**(HTML / CSS / JavaScript)从零打造,没有使用任何框架,也无需构建步骤。每个文件都配有详细注释,方便阅读和学习。管理任务清单、累积专注天数、播放环境音,帮你保持专注。
 
-**🔗 Live demo / 在线体验:** https://vv0611.github.io/pomodoro-timer/timer.html
+**🔗 Live demo / 在线体验:** https://vv0611.github.io/pomodoro-timer-with-game/timer.html
 
 ![Demo](demo.gif)
 
